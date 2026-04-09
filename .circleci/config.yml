@@ -1,0 +1,23 @@
+version: 2.1
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/node:20.10.0-browsers
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Ejecutar pruebas unitarias (Jasmine/Karma)
+          command: npm run test -- --watch=false --browsers=ChromeHeadless
+      - run:
+          name: Build del proyecto
+          command: npm run build
+
+workflows:
+  angular-workflow:
+    jobs:
+      - build-and-test
